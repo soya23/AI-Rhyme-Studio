@@ -1,0 +1,8 @@
+{
+  "name": "ラップDE老GO",
+  "description": "高齢者が自分の人生や思い出を“ラップ”で表現できるアプリ。AI韻カードを使って家族と一緒に作詞・録音し、“人生アルバム”として残せます。",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
