@@ -9,6 +9,14 @@ interface LyricEditorProps {
     onLyricsChange: (lyrics: string) => void;
 }
 
+const lyricPlaceholder = `ここに歌詞を書いてみよう！
+
+例：
+ワシの人生 まるで演歌
+酸いも甘いも乗り越えた戦果
+孫の笑顔が 一番の援歌
+まだまだこれから 人生謳歌！`;
+
 const LyricEditor: React.FC<LyricEditorProps> = ({ aiPrompt, lyrics, onLyricsChange }) => {
     const [memory, setMemory] = useState('');
     const [suggestion, setSuggestion] = useState('');
@@ -92,6 +100,7 @@ const LyricEditor: React.FC<LyricEditorProps> = ({ aiPrompt, lyrics, onLyricsCha
                     id="lyrics"
                     value={lyrics}
                     onChange={(e) => onLyricsChange(e.target.value)}
+                    placeholder={lyricPlaceholder}
                     className="w-full h-56 p-4 bg-white/90 border border-white/40 rounded-2xl focus:ring-4 focus:ring-[#A5B4FC]/50 focus:border-[#7D8DE2] transition"
                 />
             </div>

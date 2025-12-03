@@ -13,10 +13,7 @@ import GrandpaHero from './components/GrandpaHero';
 
 const heroTagline = '昭和フロー × 令和AIで人生をラップに残そう';
 
-const defaultLyrics = `ここに歌詞を書いてみよう！
-
-例：
-ワシの人生 まるで演歌
+const sampleLyrics = `ワシの人生 まるで演歌
 酸いも甘いも乗り越えた戦果
 孫の笑顔が 一番の援歌
 まだまだこれから 人生謳歌！`;
@@ -24,7 +21,7 @@ const defaultLyrics = `ここに歌詞を書いてみよう！
 const App: React.FC = () => {
     const [screenId, setScreenId] = useState('home');
     const [beat, setBeat] = useState<string | null>(null);
-    const [lyrics, setLyrics] = useState<string>(defaultLyrics);
+    const [lyrics, setLyrics] = useState<string>('');
     const [history, setHistory] = useState<string[]>([]);
     const [albumEntries, setAlbumEntries] = useState<AlbumEntry[]>([
         {
@@ -32,7 +29,7 @@ const App: React.FC = () => {
             title: 'わしの人生演歌',
             date: '2024年7月15日',
             beat: '演歌風ビート（しっとり）',
-            lyrics: defaultLyrics,
+            lyrics: sampleLyrics,
             image: 'https://picsum.photos/seed/grandpa/400/300'
         }
     ]);
