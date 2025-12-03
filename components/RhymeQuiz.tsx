@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { generateRhymeQuiz } from '../services/geminiService';
 import { RefreshIcon } from './icons';
@@ -27,7 +26,7 @@ const RhymeQuiz: React.FC<RhymeQuizProps> = ({ onWordSelect }) => {
 
     const handleGenerateQuiz = async () => {
         if (!word.trim()) {
-            alert('韻をさがしたい言葉を入力してください。');
+            alert('韻を探したい言葉を入力してください。');
             return;
         }
         setGameState('loading');
@@ -37,7 +36,7 @@ const RhymeQuiz: React.FC<RhymeQuizProps> = ({ onWordSelect }) => {
         setChoices(shuffleArray([result.correct, ...result.incorrect]));
         setGameState('playing');
     };
-    
+
     const handleSelectAnswer = (choice: string) => {
         if (gameState !== 'playing') return;
         setSelectedAnswer(choice);
@@ -46,39 +45,39 @@ const RhymeQuiz: React.FC<RhymeQuizProps> = ({ onWordSelect }) => {
 
     const handleRetry = () => {
         handleGenerateQuiz();
-    }
-    
+    };
+
     const getButtonClass = (choice: string) => {
         if (gameState === 'result') {
             if (choice === quiz?.correct) {
-                return 'bg-green-500 border-green-600 text-white scale-105'; // Correct answer
+                return 'bg-[#3ECF8E] border-[#1F9C66] text-white scale-[1.02]';
             }
             if (choice === selectedAnswer && !isCorrect) {
-                return 'bg-red-500 border-red-600 text-white'; // Incorrectly selected
+                return 'bg-[#FF6B6B] border-[#C63E3E] text-white';
             }
-            return 'bg-stone-200 border-stone-300 text-stone-500 opacity-70'; // Not selected or incorrect
+            return 'bg-white/70 border-transparent text-[#9AA1C6]';
         }
-        return 'bg-white border-yellow-400 text-yellow-600 hover:bg-yellow-400 hover:text-white'; // Default
+        return 'bg-[#F4F5FF] border-[#CBD0FF] text-[#1F244B] hover:bg-[#FFD369]/30 hover:border-[#FFD369] hover:text-[#1B1233]';
     };
 
     return (
-        <div className="p-4 bg-yellow-50 border-2 border-yellow-200 rounded-lg space-y-4">
-            <h4 className="font-display text-stone-700">韻(いん)あてクイズ！</h4>
-            
+        <div className="p-5 bg-white/90 border border-[#D7DCFF] rounded-2xl space-y-4 shadow-sm">
+            <h4 className="font-display text-[#1B1F3B] text-lg">韻（いん）当てクイズ</h4>
+
             {gameState === 'idle' || gameState === 'loading' ? (
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-3">
                     <input
                         type="text"
                         value={word}
                         onChange={(e) => setWord(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleGenerateQuiz()}
-                        placeholder="例：人生"
-                        className="flex-grow p-2 border-2 border-stone-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition"
+                        placeholder="例：人生、笑顔、冒険..."
+                        className="flex-1 p-3 border border-[#CBD0FF] rounded-2xl bg-white/80 focus:ring-4 focus:ring-[#A5B4FC]/40 focus:border-[#7D8DE2] transition placeholder:text-[#9AA1C6]"
                     />
                     <button
                         onClick={handleGenerateQuiz}
                         disabled={gameState === 'loading'}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-yellow-400 text-stone-800 rounded-lg shadow-md hover:bg-yellow-500 disabled:bg-stone-400 transition-colors font-display"
+                        className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-[#FFD369] text-[#1F244B] font-display shadow-[0_6px_0_#C17F21] hover:-translate-y-0.5 hover:shadow-[0_10px_0_#C17F21] disabled:opacity-60 transition-all"
                     >
                         <RefreshIcon className={`w-5 h-5 ${gameState === 'loading' ? 'animate-spin' : ''}`} />
                         {gameState === 'loading' ? '探し中...' : 'クイズ開始！'}
@@ -86,8 +85,8 @@ const RhymeQuiz: React.FC<RhymeQuizProps> = ({ onWordSelect }) => {
                 </div>
             ) : (
                 <>
-                    <p className="text-center text-stone-700 text-lg">
-                        「<span className="font-bold font-display text-orange-500">{word}</span>」と韻をふむのはどれ？
+                    <p className="text-center text-[#2F3560] text-lg">
+                        「<span className="font-bold font-display text-[#FFD369]">{word}</span>」と韻をふむのはどれ？
                     </p>
                     <div className="grid grid-cols-2 gap-3">
                         {choices.map((choice, index) => (
@@ -95,7 +94,7 @@ const RhymeQuiz: React.FC<RhymeQuizProps> = ({ onWordSelect }) => {
                                 key={index}
                                 onClick={() => handleSelectAnswer(choice)}
                                 disabled={gameState === 'result'}
-                                className={`p-3 border-2 rounded-lg shadow-sm transition-all duration-300 font-display text-base ${getButtonClass(choice)}`}
+                                className={`p-3 border rounded-2xl shadow-sm transition-all duration-300 font-display text-base ${getButtonClass(choice)}`}
                             >
                                 {choice}
                             </button>
@@ -105,28 +104,30 @@ const RhymeQuiz: React.FC<RhymeQuizProps> = ({ onWordSelect }) => {
             )}
 
             {gameState === 'result' && (
-                 <div className="text-center p-3 bg-white rounded-lg border-2 border-amber-200 mt-4">
-                    <h5 className={`font-display text-2xl mb-2 ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                        {isCorrect ? '🎉 ピンポーン！正解！' : '🤔 ブブー！ざんねん！'}
+                <div className="text-center p-4 bg-white/80 rounded-2xl border border-[#D7DCFF]">
+                    <h5 className={`font-display text-2xl mb-2 ${isCorrect ? 'text-[#19A769]' : 'text-[#E54848]'}`}>
+                        {isCorrect ? '🎉 ビンゴ！正解！' : '💥 ざんねん！'}
                     </h5>
-                    <p className="text-stone-600 mb-3">
-                        {isCorrect ? 'いいセンスだ！この言葉を歌詞に使ってみよう！' : `正解は「${quiz?.correct}」でした！`}
+                    <p className="text-[#4B4F7A] mb-4">
+                        {isCorrect ? 'ナイス韻感覚！この言葉を歌詞に入れてみよう。' : `正解は「${quiz?.correct}」でした。もう一度チャレンジする？`}
                     </p>
-                    <div className="flex justify-center gap-2 flex-wrap">
-                         <button
-                            onClick={() => onWordSelect(selectedAnswer!)}
-                            className="px-4 py-2 bg-orange-500 text-white text-sm rounded-full hover:bg-orange-600 transition-colors"
-                        >
-                            「{selectedAnswer}」を歌詞に追加
-                        </button>
+                    <div className="flex flex-wrap justify-center gap-2">
+                        {selectedAnswer && (
+                            <button
+                                onClick={() => onWordSelect(selectedAnswer)}
+                                className="px-4 py-2 bg-[#FFD369] text-[#1F244B] text-sm rounded-full font-display shadow hover:-translate-y-0.5 transition"
+                            >
+                                「{selectedAnswer}」を歌詞に追加
+                            </button>
+                        )}
                         <button
                             onClick={handleRetry}
-                            className="px-4 py-2 bg-stone-500 text-white text-sm rounded-full hover:bg-stone-600 transition-colors"
+                            className="px-4 py-2 bg-[#1B1F3B] text-white text-sm rounded-full font-display shadow hover:bg-[#282E66] transition"
                         >
                             もう一回！
                         </button>
                     </div>
-                 </div>
+                </div>
             )}
         </div>
     );

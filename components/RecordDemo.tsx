@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { MicrophoneIcon } from './icons';
 
@@ -11,43 +10,56 @@ const RecordDemo: React.FC<RecordDemoProps> = ({ lyrics, beat }) => {
     const [isRecording, setIsRecording] = useState(false);
 
     useEffect(() => {
-        let interval: number;
+        let interval: number | undefined;
         if (isRecording) {
             interval = window.setInterval(() => {
-                // This is just for demo visual effect
+                // animation placeholder
             }, 500);
         }
-        return () => clearInterval(interval);
+        return () => {
+            if (interval) {
+                clearInterval(interval);
+            }
+        };
     }, [isRecording]);
-    
+
     const handleRecordClick = () => {
         setIsRecording(prev => !prev);
-    }
+    };
 
     return (
-        <div className="space-y-6 text-center">
-            <div className="p-4 bg-stone-100 rounded-lg max-h-48 overflow-y-auto border">
-                <h4 className="font-display text-stone-600 border-b pb-2 mb-2">あなたの歌詞</h4>
-                <p className="text-stone-800 whitespace-pre-wrap text-sm">{lyrics || "歌詞がまだありません。"}</p>
-            </div>
-            
-            <div className="p-3 bg-blue-100 rounded-lg border border-blue-200">
-                <p className="text-sm text-blue-700">選択中のビート: <span className="font-bold">{beat || '未選択'}</span></p>
+        <div className="space-y-6 text-center text-[#1B1F3B]">
+            <div className="p-5 bg-white/90 rounded-2xl border border-[#D7DCFF] shadow-sm max-h-48 overflow-y-auto">
+                <h4 className="font-display text-[#4B4F7A] border-b border-[#E6E8FF] pb-2 mb-3">あなたの歌詞</h4>
+                <p className="text-sm text-[#1D2247] whitespace-pre-wrap leading-relaxed">
+                    {lyrics || '歌詞がまだありません。'}
+                </p>
             </div>
 
-            <div className="flex flex-col items-center justify-center space-y-4">
-                <div 
-                    className={`relative flex items-center justify-center w-24 h-24 rounded-full transition-all duration-300 ${isRecording ? 'bg-red-500' : 'bg-stone-300'}`}
-                >
-                    <MicrophoneIcon className={`w-12 h-12 text-white transition-transform ${isRecording ? 'scale-110' : ''}`} />
-                    {isRecording && (
-                        <div className="absolute inset-0 rounded-full border-4 border-red-300 animate-ping"></div>
-                    )}
-                </div>
-                <p className={`font-display text-xl ${isRecording ? 'text-red-600 animate-pulse' : 'text-stone-600'}`}>
-                    {isRecording ? '録音中... (デモ)' : '録音ボタンを押してね'}
+            <div className="p-4 bg-[#E8ECFF] rounded-2xl border border-[#CBD0FF]">
+                <p className="text-sm text-[#1B1F3B]">
+                    選択中のビート：<span className="font-bold">{beat || '未選択'}</span>
                 </p>
-                <p className="text-xs text-stone-500">（このアプリはデモのため、実際の音声は録音されません）</p>
+            </div>
+
+            <div className="flex flex-col items-center gap-4">
+                <button
+                    type="button"
+                    onClick={handleRecordClick}
+                    className="relative flex items-center justify-center w-28 h-28 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-white/60"
+                >
+                    <div className={`absolute inset-0 rounded-full ${isRecording ? 'bg-[#FF6B6B]' : 'bg-[#1B1F3B]'} shadow-[0_15px_35px_rgba(15,23,72,0.35)]`} />
+                    <MicrophoneIcon className={`relative w-14 h-14 text-white transition-transform ${isRecording ? 'scale-110' : ''}`} />
+                    {isRecording && (
+                        <span className="absolute inset-0 rounded-full border-4 border-[#FFB4B4] animate-ping" />
+                    )}
+                </button>
+                <p className={`font-display text-xl ${isRecording ? 'text-[#FF6B6B] animate-pulse' : 'text-[#4B4F7A]'}`}>
+                    {isRecording ? '録音中…（デモ）' : 'マイクをタップして録音開始！'}
+                </p>
+                <p className="text-xs text-[#7D82AA]">
+                    ※ デモ表示のため実際の音声は録音されません
+                </p>
             </div>
         </div>
     );
