@@ -62,7 +62,7 @@ const LyricEditor: React.FC<LyricEditorProps> = ({ aiPrompt, lyrics, onLyricsCha
                     value={memory}
                     onChange={(e) => setMemory(e.target.value)}
                     placeholder="例：去年の夏、孫と一緒に行った夏祭り。金魚すくいを教えて、夜空の花火を一緒に眺めた。"
-                    className="w-full h-28 p-4 bg-white/85 border border-white/40 rounded-2xl focus:ring-4 focus:ring-[#FFD369]/50 focus:border-[#FFD369] transition placeholder:text-[#8E94C7]"
+                    className="w-full h-28 p-4 bg-white/90 border-2 border-[#E0DAFF] rounded-2xl focus:ring-4 focus:ring-[#FFD369]/40 focus:border-[#FFD369] transition placeholder:text-[#8E94C7]"
                 />
                 <button
                     onClick={handleGetSuggestion}
@@ -101,7 +101,7 @@ const LyricEditor: React.FC<LyricEditorProps> = ({ aiPrompt, lyrics, onLyricsCha
                     value={lyrics}
                     onChange={(e) => onLyricsChange(e.target.value)}
                     placeholder={lyricPlaceholder}
-                    className="w-full h-56 p-4 bg-white/90 border border-white/40 rounded-2xl focus:ring-4 focus:ring-[#A5B4FC]/50 focus:border-[#7D8DE2] transition"
+                    className="w-full h-56 p-4 bg-white/95 border-2 border-[#E0DAFF] rounded-2xl focus:ring-4 focus:ring-[#A5B4FC]/50 focus:border-[#7D8DE2] transition"
                 />
             </div>
         </div>
