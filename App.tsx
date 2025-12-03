@@ -25,6 +25,7 @@ const App: React.FC = () => {
     const [screenId, setScreenId] = useState('home');
     const [beat, setBeat] = useState<string | null>(null);
     const [lyrics, setLyrics] = useState<string>(defaultLyrics);
+    const [history, setHistory] = useState<string[]>([]);
     const [albumEntries, setAlbumEntries] = useState<AlbumEntry[]>([
         {
             id: 1,
@@ -60,10 +61,23 @@ const App: React.FC = () => {
                     }
                 }
             }
+            setHistory((prev) => (next === 'home' ? [] : [...prev, currentScreen.id]));
             setScreenId(next);
         },
         [beat, lyrics, albumEntries, currentScreen.id]
     );
+
+    const handleGoBack = useCallback(() => {
+        setHistory((prev) => {
+            if (!prev.length) {
+                return prev;
+            }
+            const updated = [...prev];
+            const last = updated.pop()!;
+            setScreenId(last);
+            return updated;
+        });
+    }, []);
 
     const renderScreenContent = () => {
         switch (screenId) {
@@ -98,6 +112,16 @@ const App: React.FC = () => {
                         <div className="absolute -left-12 -top-10 w-48 h-48 bg-white/20 rounded-full blur-2xl" />
                         <div className="absolute right-4 top-6 w-28 h-28 bg-[#FFE28F]/55 rounded-full blur-xl" />
                         <div className="absolute right-[-40px] bottom-[-40px] w-44 h-44 border border-white/25 rounded-full" />
+                    </div>
+                    <div className="absolute left-6 top-6">
+                        {history.length > 0 && (
+                            <button
+                                onClick={handleGoBack}
+                                className="px-4 py-2 rounded-full bg-white/15 text-white font-display text-sm border border-white/40 hover:bg-white/25 transition-all"
+                            >
+                                ← 戻る
+                            </button>
+                        )}
                     </div>
                     <div className="relative flex flex-col items-center gap-4 text-center">
                         <GrandpaHero className="w-44 h-44 rounded-[1.5rem] shadow-[0_25px_50px_rgba(9,7,28,0.6)] border border-white/30 object-cover" />
