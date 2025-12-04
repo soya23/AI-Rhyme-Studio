@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    color: #10162f;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-body), 'Noto Sans JP', sans-serif;
+    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.22), transparent 45%), #4f63ff;
+    min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+button,
+.font-display {
+    font-family: var(--font-display), 'Mochiy Pop One', cursive;
+}

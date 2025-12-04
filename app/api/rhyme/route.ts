@@ -1,26 +1,34 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { NextRequest, NextResponse } from 'next/server';
+import { extractOpenAiKey } from '../../../lib/api';
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_MODEL = process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
 
-const errorResponse = (res: VercelResponse, status: number, message: string) => {
-    res.status(status).json({ error: message });
+const demoQuiz = {
+    correct: '戦友',
+    incorrect: ['平和', '日常', 'お茶']
 };
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-    if (req.method !== 'POST') {
-        res.setHeader('Allow', 'POST');
-        return errorResponse(res, 405, 'Method Not Allowed');
+const errorResponse = (status: number, message: string) => NextResponse.json({ error: message }, { status });
+
+export async function POST(req: NextRequest) {
+    const apiKey = extractOpenAiKey(req.headers) ?? process.env.OPENAI_API_KEY;
+
+    if (!apiKey) {
+        console.warn('OpenAI API key is missing. Returning demo rhyme quiz.');
+        return NextResponse.json(demoQuiz);
     }
 
-    if (!OPENAI_API_KEY) {
-        return errorResponse(res, 500, 'OpenAI API key is not configured.');
+    let body: unknown;
+    try {
+        body = await req.json();
+    } catch {
+        return errorResponse(400, 'Invalid JSON payload.');
     }
 
-    const { word } = req.body ?? {};
+    const { word } = (body as { word?: unknown }) ?? {};
 
     if (typeof word !== 'string' || word.trim().length === 0) {
-        return errorResponse(res, 400, 'Invalid payload.');
+        return errorResponse(400, 'Invalid payload.');
     }
 
     try {
@@ -28,7 +36,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${OPENAI_API_KEY}`
+                Authorization: `Bearer ${apiKey}`
             },
             body: JSON.stringify({
                 model: OPENAI_MODEL,
@@ -36,12 +44,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 messages: [
                     {
                         role: 'system',
-                        content: 'あなたは韻踏みクイズの出題者です。回答は必ずJSONのみで返してください。'
+                        content: 'あなたは韻踏みクイズの出題者です。回答は必ずJSON形式で返してください。'
                     },
                     {
                         role: 'user',
-                        content: `ターゲットの単語:「${word}」。
-条件:
+                        content: `ターゲットの単語：「${word}」。条件:
 - この単語と韻を踏む面白い日本語の単語を1つ提示する
 - 韻を踏まない一般的な日本語の単語を3つ提示する
 - 以下のJSON形式のみで出力する: {"correct":"...", "incorrect":["...","...","..."]}
@@ -67,12 +74,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             throw new Error('Invalid JSON structure');
         }
 
-        res.status(200).json(quiz);
+        return NextResponse.json(quiz);
     } catch (error) {
         console.error('Rhyme quiz generation error:', error);
-        res.status(200).json({
-            correct: 'エラー',
-            incorrect: ['AIの', '調子が', '悪いみたい']
-        });
+        return NextResponse.json(demoQuiz);
     }
 }
