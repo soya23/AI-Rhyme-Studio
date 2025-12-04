@@ -9,12 +9,12 @@ interface LyricEditorProps {
     onLyricsChange: (lyrics: string) => void;
 }
 
-const lyricPlaceholder = `ここに歌詞を書いてみよう！
+const lyricPlaceholder = `ここに歌詞を書いてみよう。
 
-例：
+例）
 ワシの人生 まるで演歌
-酸いも甘いも乗り越えた戦果
-孫の笑顔が 一番の援歌
+酸いも甘いも乗り越えた戦友
+孫の笑顔が一番の援軍
 まだまだこれから 人生謳歌！`;
 
 const LyricEditor: React.FC<LyricEditorProps> = ({ aiPrompt, lyrics, onLyricsChange }) => {
@@ -47,7 +47,7 @@ const LyricEditor: React.FC<LyricEditorProps> = ({ aiPrompt, lyrics, onLyricsCha
 
     const handleWordSelect = (word: string) => {
         const separator =
-            lyrics.trim().length === 0 ? '' : lyrics.endsWith('\n') || lyrics.endsWith(' ') ? '' : ' ';
+            lyrics.trim().length === 0 || lyrics.endsWith('\n') || lyrics.endsWith(' ') ? '' : ' ';
         onLyricsChange(`${lyrics}${separator}${word}`);
     };
 
@@ -61,7 +61,7 @@ const LyricEditor: React.FC<LyricEditorProps> = ({ aiPrompt, lyrics, onLyricsCha
                     id="memory"
                     value={memory}
                     onChange={(e) => setMemory(e.target.value)}
-                    placeholder="例：去年の夏、孫と一緒に行った夏祭り。金魚すくいを教えて、夜空の花火を一緒に眺めた。"
+                    placeholder="例：去年の夏、孫と一緒に行った夏祭り。金魚すくいを教えて、夜空の花火を並んで眺めた。"
                     className="w-full h-28 p-4 bg-white/90 border-2 border-[#E0DAFF] rounded-2xl focus:ring-4 focus:ring-[#FFD369]/40 focus:border-[#FFD369] transition placeholder:text-[#8E94C7]"
                 />
                 <button
@@ -88,7 +88,9 @@ const LyricEditor: React.FC<LyricEditorProps> = ({ aiPrompt, lyrics, onLyricsCha
             )}
 
             <div>
-                <label className="block text-lg font-display text-[#131740] mb-3">2. 韻をふむ言葉をさがそう</label>
+                <label className="block text-lg font-display text-[#131740] mb-3">
+                    2. 韻をふむ言葉をさがそう
+                </label>
                 <RhymeQuiz onWordSelect={handleWordSelect} />
             </div>
 

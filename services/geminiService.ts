@@ -17,13 +17,14 @@ const callApi = async <T>(path: string, payload: Record<string, unknown>, fallba
         });
 
         if (!response.ok) {
-            throw new Error(`API error: ${response.status}`);
+            const errorPayload = await response.text().catch(() => '');
+            throw new Error(`API error: ${response.status} ${errorPayload}`);
         }
 
         return (await response.json()) as T;
     } catch (error) {
         console.error(`Failed to call ${path}:`, error);
-        return delay(fallback);
+        return delay(fallback ?? ({} as T));
     }
 };
 
